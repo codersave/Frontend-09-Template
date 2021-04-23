@@ -1,0 +1,30 @@
+<script>
+    /*
+    obj三要素：唯一标识、状态、行为
+
+    设计原则：设计对象的状态和行为时，总是遵循 "行为改变状态" 的原则
+    
+    */ 
+    class Human {
+        constructor(name = "人") {
+            this.name = name;
+            this.blood = 100;
+        }
+        hurt(damage) {
+            this.blood -= damage;
+            console.log(`${this.name}受到了${damage}点伤害，还剩${this.blood}点血`)
+        }
+    }
+    class Dog {
+        constructor(name = "狗") {
+            this.name = name;
+            this.attack = 40;
+        }
+        bite() {
+            return this.attack;
+        }
+    }
+    let human = new Human('小明');
+    let dog = new Dog();
+    human.hurt(dog.bite())
+</script>

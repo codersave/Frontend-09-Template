@@ -1,0 +1,21 @@
+<!-- 正则表达式词法分析四则运算 -->
+<script>
+    let regexp = /([0-9\.]+)|([ \t])|([\r\n]+)|(\*)|(\/)|(\+)|(\-)/g;
+
+    let dictionary = ["Number","Whitespace","LineTerminator","*","/","+","-"];
+
+    function tokenize(source) {
+        let result = null;
+        while(true) {
+            // exec 返回数组，数组的第 0 个元素是与正则表达式相匹配的文本，第1个元素开始才是与之对应的表达式匹配的文本
+            result = regexp.exec(source);
+            if(!result) break;
+            for(let i = 1; i <= dictionary.length; i++) {
+                if(result[i])
+                    console.log(dictionary[i-1]);
+            }
+            console.log(result);
+        }
+    }
+    tokenize("1244 + 20 * 30")
+</script>

@@ -1,0 +1,98 @@
+<!-- 搜索寻路 -->
+
+<style>
+	#container {
+		width: 700px;
+	}
+	.cell {
+		display: inline-block;
+		width: 6px;
+		height: 6px;
+		line-height: 7px;
+		background-color: gray;
+		border-bottom: 1px solid white;
+		border-right: 1px solid white;
+		vertical-align: middle;
+	} 
+</style>
+
+<div id="container"></div>
+<button onclick="localStorage['map'] = JSON.stringify(map)">save</button>
+
+<script>
+    // 初始化100 * 100 的一维数组
+    let map = localStorage['map'] ? JSON.parse(localStorage['map']) : Array(10000).fill(0);
+
+    // 获取容器
+    let container = document.getElementById("container");
+    for(let y = 0; y < 100; y++) {
+        for(let x = 0; x < 100; x++) {
+			let cell = document.createElement("div");
+			cell.classList.add('cell');
+
+			if(map[100*y + x] == 1) 
+				cell.style.backgroundColor = 'black';
+
+			// 画图 0是空、1是有颜色填充 clear判断点击右键清除
+			cell.addEventListener("mousemove", () => {
+				if(mousedown) {
+					if(clear) {
+						cell.style.backgroundColor = "";
+						map[100*y + x] = 0;
+					} else {
+						cell.style.backgroundColor = "black";
+						map[100*y + x] = 1;
+					}
+				}
+			})
+
+			container.appendChild(cell);
+		}
+	}
+	
+	let mousedown = false;
+	let clear = false;
+	document.addEventListener("mousedown", e => {
+		mousedown = true;
+		clear = (e.which === 3)
+	})
+	document.addEventListener("mouseup", () => mousedown = false);
+	// 阻止右键点击默认弹窗
+	document.addEventListener("contextmenu", e => e.preventDefault());
+
+    // 广度优先搜索寻路
+    function path(map, start, end) {
+        // 队列 先进先出
+        let queue = [start];
+        // 入队逻辑
+        function insert(x, y) {
+            // 四周边界
+            if(x < 0 || x >= 100 || y < 0 || y >= 100)
+                return ;
+            // 过滤找过的点
+            if(map[100 * y + x])
+                return ;
+            // 找到新的点
+            map[100 * y + x] = 2;
+            // 入队
+            queue.push([x, y]);
+        }
+
+        while(queue.length) {
+            // 出队
+            let [x, y] = queue.shift();
+            console.log(x, y);
+            // 找到终点
+            if(x === end[0] && y === end[1])
+                return true;
+            // 上右下左
+            insert(x, y + 1);
+            insert(x + 1, y);
+            insert(x, y - 1);
+            insert(x - 1, y);
+            
+        }
+        return false;
+    }
+
+</script>
