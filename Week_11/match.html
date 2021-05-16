@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .select,
+        .select1 {
+            display: float;
+        }
+        .select::first-letter {
+            color: red;
+        }
+        .select1::first-line {
+            color: pink;
+        }
+    </style>
+</head>
+<body>
+    <div class="select">
+        float的first-letter
+    </div>
+    <div class="select1">
+        float的first-line
+    </div>
+
+    <p>match函数匹配</p>
+    <div id="id">
+        测试
+        <span>文本</span>
+        <div id="menu" class="aside">
+            侧边栏
+        </div>
+    </div>
+    <script>
+        function match(selector, element) {
+            const childList = element.children;
+            const {
+                className,
+                idName
+            } = format(selector);
+            console.log(className +'--'+idName)
+
+            for(let item of childList) {
+                const itemClassName = item.className,
+                    itemIdName = item.getAttribute('id'),
+                    parentElement = item.parentNode.nodeName;
+                console.log(idName)
+                if(parentElement == 'DIV' && idName == itemIdName && itemClassName == className) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        function format(selector) {
+            const arr = selector.split('.'),
+                preSelctor = arr[0],
+                idName = preSelctor.split('#')[1];
+            return {
+                className: arr[1],
+                idName
+            }
+        }
+
+
+        console.log(match("div #menu.aside", document.getElementById("id")));
+
+    </script>
+</body>
+</html>
